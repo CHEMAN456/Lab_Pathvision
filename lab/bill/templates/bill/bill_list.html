@@ -1,0 +1,37 @@
+{% extends 'bill/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Your Bills</h2>
+
+    {% if bills %}
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Patient Name</th>
+                    <th>Date</th>
+                    <th>Total Amount</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bill in bills %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ bill.patient_name }}</td>
+                    <td>{{ bill.date|date:"d M Y" }}</td>
+                    <td>&#8377; {{ bill.total_amount }}</td>
+                    <td>
+                        <a href="{% url 'bill_detail' bill.id %}" class="btn btn-sm btn-primary">View</a>
+                        <a href="{% url 'download_pdf' bill.id %}" class="btn btn-sm btn-success">Download PDF</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-muted">You have not created any bills yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

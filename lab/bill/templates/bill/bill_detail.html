@@ -1,0 +1,156 @@
+{% extends 'bill/base.html' %}
+
+{% block content %}
+<style>
+
+    @media print{
+        body * {
+            visibility:hidden;         /* Hide everything */ 
+        }
+
+        #invoiceBox, #invoiceBox * {
+            visibility:visible;        /* Show only the bill */
+        }
+
+        #invoiceBox{
+            position: absolute;
+            left:0;
+            top:0;
+            width:100%;
+            height:auto;
+            border:none;
+        }
+        
+        .btn, a.btn,.mt-4{
+            display: none !important;
+
+        }
+        @page{
+            margin:0;
+        }
+
+    }
+
+    .invoice-wrapper{
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        margin-top: 2rem;
+    }
+    #invoiceBox {
+        width: 500px;
+        height: 570px; /* Fixed height */
+        border: 2px solid black;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        background-color: white;
+        overflow: hidden;
+        font-size: 14px; /* Base font size */
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+    .tight-line p {
+        margin-bottom: 0px; /* or 2px for even tighter spacing */
+    }
+    
+
+    .bold { font-weight: bold; }
+    .right { text-align: right; }
+    .center { text-align: center; }
+    .no-border { border: none; }
+</style>
+
+<div class="invoice-wrapper">
+    <div id = "invoiceBox" >
+        <h5 class="center">Invoice</h5>
+
+        <!-- Header Section -->
+        <table >
+            <tr>
+                <td colspan="2">
+                    <b>PATHVISION DIAGNOSTICS</b><br>
+                    Email: <a href="#">swatimandalkar123@gmail.com</a><br>
+                    Mob: 9869209462 / 9653639985
+                </td>
+                <td>
+                    Date: {{ bill.date }}<br>
+                    Patient's Name: {{ bill.patient_name }}<br>
+                    Age: {{ bill.age }}<br>
+                    Dr.Ref : {{ bill.doctor_name }}
+                </td>
+            </tr>
+        </table>
+
+        <!-- Test Details Table -->
+        <table >
+            <tr>
+                <th>Sr.No.</th>
+                <th>Test Description</th>
+                <th>Amount</th>
+            </tr>
+            {% for test_name, result in test_items %}
+            <tr>
+                <td style = "padding-top:2px; padding-bottom:2px;">{{ forloop.counter }}</td>
+                <td class="bold" style ="padding-top:2px;padding-bottom:2px;">{{ test_name }}</td>
+                <td class="right" style ="padding-top:2px;padding-bottom:2px;">{{ result }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="2" class="right bold">Total</td>
+                <td class="bold right">{{ bill.total_amount }}/-</td>
+            </tr>
+        </table>
+
+        <!-- Footer Section Inside Bill -->
+        <div class="tight-line">
+            <p><b>Received with thanks, a sum of Rs: {{ bill.total_amount }}</b></p>
+            <p><b>Rs:{{ bill.amount_in_words }}</b></p> 
+            <p class="right"><b>For Pathvision Diagnostics</b></p><br><br><br><br>
+            <p class="right"><b>Authorised Signatory</b></p>
+        </div>
+        
+
+        
+
+        <!-- Print and PDF Buttons -->
+       
+    </div>
+</div>
+<div class="mt-4 text-center">
+    <button onclick="window.print()" class="btn btn-primary mx-2">🖨️ Print Bill</button>
+    <a href="{% url 'download_pdf' bill.id %}" target="_blank" class="btn btn-success mx-2">📥 Download PDF</a>
+</div>
+
+<script>
+    window.addEventListener("load", function () {
+        const box = document.getElementById("invoiceBox");
+        let fontSize = 14;
+        let padding = 20;
+        const maxHeight = 550; // Same as the height you've set
+
+        function applyStyles() {
+            box.style.fontSize = fontSize + "px";
+            box.style.padding = padding + "px";
+        }
+
+        applyStyles();
+
+        while (box.scrollHeight > maxHeight && fontSize > 12) {
+            fontSize -= 0.5;
+            if (padding > 10) {
+                padding -= 1; // Slightly reduce padding as well
+            }
+            applyStyles();
+        }
+    });
+</script>
+{% endblock %}

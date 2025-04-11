@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .invoice-wrapper{
+            text-align: center;
+            margin-top: 2rem;
+        }
+        #invoiceBox {
+            width: 420pt;
+            height: 595pt; /* Fixed height */
+            border: 2pt solid black;
+            padding: 20pt;
+            font-family: Arial, sans-serif;
+            background-color: white;
+            {% comment %} overflow: hidden; {% endcomment %}
+            font-size: 14pt; /* Base font size */
+        }
+    
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+    
+        th, td {
+            border: 1pt solid black;
+            padding: 8pt;
+            text-align: left;
+        }
+        .tight-line p {
+            margin-bottom: 0pt; /* or 2px for even tighter spacing */
+        }
+        
+    
+        .bold { font-weight: bold; }
+        .right { text-align: right; }
+        .center { text-align: center; }
+        .no-border { border: none; }
+    </style>
+</head>
+<body>
+    <div class="invoice-wrapper">
+        <div id = "invoiceBox" >
+            <h5 class="center">Invoice</h5>
+    
+            <!-- Header Section -->
+            <table >
+                <tr>
+                    <td colspan="2">
+                        <b>PATHVISION DIAGNOSTICS</b><br>
+                        Email: <a href="#">swatimandalkar123@gmail.com</a><br>
+                        Mob: 9869209462 / 9653639985
+                    </td>
+                    <td>
+                        Date: {{ bill.date }}<br>
+                        Patient's Name: {{ bill.patient_name }}<br>
+                        Age: {{ bill.age }}<br>
+                        Dr.Ref : {{ bill.doctor_name }}
+                    </td>
+                </tr>
+            </table>
+    
+            <!-- Test Details Table -->
+            <table >
+                <tr>
+                    <th>Sr.No.</th>
+                    <th>Test Description</th>
+                    <th>Amount</th>
+                </tr>
+                
+                {% for test_name, amount in test_items %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td class="bold">{{ test_name }}</td>
+                    <td class="right">{{ amount }}</td>
+                </tr>
+                {% endfor %}
+
+                <tr>
+                    <td colspan="2" class="right bold">Total</td>
+                    <td class="bold right">{{ bill.total_amount }}/-</td>
+                </tr>
+            </table>
+    
+            <!-- Footer Section Inside Bill -->
+            <div class="tight-line">
+                <p><b>Received with thanks, a sum of Rs: {{ bill.total_amount }}</b></p>
+                <p><b>Rs:{{ bill.amount_in_words }}</b></p> 
+                <p class="right"><b>For Pathvision Diagnostics</b></p><br><br><br><br>
+                <p class="right"><b>Authorised Signatory</b></p>
+            </div>
+            
+    
+            
+    
+            <!-- Print and PDF Buttons -->
+           
+        </div>
+    </div>
+</body>

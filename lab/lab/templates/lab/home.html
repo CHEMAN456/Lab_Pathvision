@@ -1,0 +1,6 @@
+{% extends 'bill/base.html' %}
+{% block content %}
+  <h1>Welcome, {{ request.user.username }}!</h1>
+  <p>This is the Home Page of your Lab Billing System.</p>
+  <a href="{% url 'create_bill' %}">Create New Bill</a>
+{% endblock %}
