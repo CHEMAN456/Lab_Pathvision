@@ -45,19 +45,19 @@ def login_view(request):
         
         if user is None:
             
-            messages.error(request,f'Invalid Login, Try again {user}')
+            messages.error(request,f'Invalid Login, Try again {user.username}')
             return redirect('login')
         
         if user.is_superuser:
             
             user = login(request,user)
-            messages.success(request,f'Welcome Superuser {user}, Login Successful')
+            messages.success(request,f'Welcome Superuser {user.username}, Login Successful')
             return redirect('home')
         
         if user is not None:
             
             user = login(request,user)
-            messages.success(request,f'Welcome User {user},Login Successful')
+            messages.success(request,f'Welcome User {user.username},Login Successful')
             return redirect('home')
         
     return render(request,'lab/login.html')
