@@ -35,32 +35,27 @@ def register(request):
 
 
 def login_view(request):
-    
     if request.method == 'POST':
-        
         username = request.POST['username']
         password = request.POST['password']
 
-        user = authenticate(request,username = username ,password = password)
-        
+        user = authenticate(request, username=username, password=password)
+
         if user is None:
-            
-            messages.error(request,f'Invalid Login, Try again {user.username}')
+            messages.error(request, 'Invalid login, try again.')
             return redirect('login')
-        
+
+        login(request, user)
+
         if user.is_superuser:
-            
-            user = login(request,user)
-            messages.success(request,f'Welcome Superuser {user.username}, Login Successful')
-            return redirect('home')
-        
-        if user is not None:
-            
-            user = login(request,user)
-            messages.success(request,f'Welcome User {user.username},Login Successful')
-            return redirect('home')
-        
-    return render(request,'lab/login.html')
+            messages.success(request, f'Welcome Superuser {user.username}, Login Successful')
+        else:
+            messages.success(request, f'Welcome User {user.username}, Login Successful')
+
+        return redirect('home')
+
+    return render(request, 'lab/login.html')
+
             
 
 def logout_view(request):
