@@ -34,7 +34,7 @@ def register(request):
     return render(request,'lab/register.html',{'form':form})  
 
 
-def login(request):
+def login_view(request):
     
     if request.method == 'POST':
         
@@ -63,7 +63,7 @@ def login(request):
     return render(request,'lab/login.html')
             
 
-def logout(request):
+def logout_view(request):
     
     user = request.user.username
     
