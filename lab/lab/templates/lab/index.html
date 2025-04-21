@@ -1,14 +1,55 @@
 {% extends 'bill/base.html' %}
 {% block content %}
 
+<style>
+    .welcome-container {
+        min-height: 70vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(to right, #e0f7fa, #ffffff);
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        margin-top: 40px;
+    }
 
+    .welcome-heading {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #00695c;
+        margin-bottom: 20px;
+    }
 
-    <title>Welcome to Pathvision Lab</title>
+    .welcome-text {
+        font-size: 1.2rem;
+        color: #333;
+        margin-bottom: 30px;
+    }
 
+    .login-btn {
+        background-color: #00796b;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
 
-    <h2>Welcome to Pathvision Diagnostics</h2>
-    <p>Please <a href="{% url 'login' %}">Login</a> to continue.</p>
+    .login-btn:hover {
+        background-color: #004d40;
+        color: white;
+    }
+</style>
 
+<div class="container">
+    <div class="welcome-container text-center">
+        <h2 class="welcome-heading">Welcome to Pathvision Diagnostics</h2>
+        <p class="welcome-text">Your trusted partner in precision and care. Log in to access patient billing and reports.</p>
+        <a href="{% url 'login' %}" class="login-btn">Login</a>
+    </div>
+</div>
 
-
-{% endblock %} 
+{% endblock %}

@@ -65,7 +65,7 @@ def logout_view(request):
     if request.method == 'POST':
         
         logout(request)
-        messages.success(request,f'You have been Logged Out Successfully{user}')
+        messages.success(request,f'You have been Logged Out Successfully {user}')
         return redirect('home')
     
     return render(request,'lab/logout.html')
