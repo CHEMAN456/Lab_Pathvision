@@ -1,13 +1,85 @@
 {% extends 'bill/base.html' %}
 
 {% block content %}
+<div class="container my-5">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center mb-4">🧾 Create Bill</h2>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <!-- Date -->
+                <div class="mb-3 col-md-6">
+                    <label for="{{ form.date.id_for_label }}" class="form-label">Date</label>
+                    {{ form.date }}
+                </div>
 
-<h2>Create Bill</h2>
-<form method = 'post'>
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type = 'submit'> Create </button>
+                <div class="mb-3 col-md-3">
+                    <label for="{{ form.prefix.id_for_label }}" class="form-label">Prefix</label>
+                    {{ form.prefix }}
+                </div>
 
-</form>
+                <!-- Patient Name -->
+                <div class="mb-3 col-md-6">
+                    <label for="{{ form.patient_name.id_for_label }}" class="form-label">Patient Name</label>
+                    {{ form.patient_name }}
+                </div>
 
+                <!-- Age -->
+                <div class="mb-3 col-md-6">
+                    <label for="{{ form.age.id_for_label }}" class="form-label">Age</label>
+                    {{ form.age }}
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label for="{{ form.gender.id_for_label }}" class="form-label">Gender</label>
+                    {{ form.gender }}
+                </div>
+
+                <!-- Doctor Choice Dropdown -->
+                <div class="mb-3 col-md-6">
+                    <label for="{{ form.doctor_choice.id_for_label }}" class="form-label">Select Doctor</label>
+                    {{ form.doctor_choice }}
+                </div>
+
+                <!-- Custom Doctor Name Field -->
+                <div class="mb-3 col-md-6" id="custom-doctor-name" style="display: none;">
+                    <label for="{{ form.doctor_name.id_for_label }}" class="form-label">Enter Doctor Name</label>
+                    {{ form.doctor_name }}
+                </div>
+
+                <!-- Test Details -->
+                <div class="mb-3 col-md-12">
+                    <label for="{{ form.test_details.id_for_label }}" class="form-label">Test Details</label>
+                    {{ form.test_details }}
+                </div>
+
+                
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success">💾 Create Bill</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const doctorChoice = document.getElementById("id_doctor_choice");
+    const customDoctorDiv = document.getElementById("custom-doctor-name");
+    const customDoctorInput = document.getElementById("id_doctor_name");
+
+    function toggleDoctorInput() {
+        if (doctorChoice.value === "Other") {
+            customDoctorDiv.style.display = "block";
+            customDoctorInput.value = "";
+        } else {
+            customDoctorDiv.style.display = "none";
+            customDoctorInput.value = doctorChoice.value;
+        }
+    }
+
+    doctorChoice.addEventListener("change", toggleDoctorInput);
+    window.addEventListener("DOMContentLoaded", toggleDoctorInput);
+</script>
 {% endblock %}
+

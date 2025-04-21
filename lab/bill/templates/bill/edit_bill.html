@@ -1,0 +1,12 @@
+{% extends 'bill/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Edit Bill for {{ bill.patient_name }}</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Update Bill</button>
+        <a href="{% url 'bill_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

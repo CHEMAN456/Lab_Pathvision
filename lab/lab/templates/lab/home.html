@@ -1,6 +1,24 @@
 {% extends 'bill/base.html' %}
+
 {% block content %}
-  <h1>Welcome, {{ request.user.username }}!</h1>
-  <p>This is the Home Page of your Lab Billing System.</p>
-  <a href="{% url 'create_bill' %}">Create New Bill</a>
+<div class="container my-5">
+  <div class="text-center">
+    <h1 class="display-5 fw-bold text-primary mb-4">Welcome, {{ request.user.username }}!</h1>
+    <p class="lead text-muted mb-4">This is the Home Page of your <strong>Pathvision Lab Billing System</strong>.</p>
+
+    <div class="d-flex justify-content-center">
+      <a href="{% url 'create_bill' %}" class="btn btn-lg btn-success me-3 shadow">
+        🧾 Create New Bill
+      </a>
+      <a href="{% url 'bill_list' %}" class="btn btn-lg btn-outline-primary shadow">
+        📄 View Bills
+      </a>
+    </div>
+
+    <div class="mt-5">
+      <img src="https://sunrisediagnosis.com/wp-content/uploads/2024/10/blood1.jpg" style="max-height: 400px;">
+    </div>
+  </div>
+</div>
 {% endblock %}
+

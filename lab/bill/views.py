@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from num2words import num2words
@@ -9,18 +10,20 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 
-
-
 # Create your views here.
 
 @login_required
-
 def create_bill(request):
     if request.method == 'POST':
         form = BillForm(request.POST)
         if form.is_valid():
             bill = form.save(commit=False)
             bill.user = request.user
+
+            # Use custom doctor name if 'Other' selected
+            doctor_choice = form.cleaned_data.get('doctor_choice')
+            if doctor_choice != 'Other':
+                bill.doctor_name = doctor_choice
 
             # Auto-calculate total_amount
             bill.total_amount = sum(
@@ -37,6 +40,7 @@ def create_bill(request):
             return redirect('bill_detail', bill_id=bill.id)
     else:
         form = BillForm()
+
     return render(request, 'bill/create_bill.html', {'form': form})
 
     
@@ -110,6 +114,30 @@ def download_pdf(request, bill_id):
 
     return response
         
+@require_POST
+
+def delete_bills(request):
+    selected_ids = request.POST.getlist('selected_bills')
+    Bill.objects.filter(id__in = selected_ids).delete()
+    messages.success(request,"Selected Bills Deleted Successfully")
+    return redirect('bill_list')
+
+@login_required
+def edit_bill(request, bill_id):
+    bill = get_object_or_404(Bill, id=bill_id, user=request.user)
+
+    if request.method == 'POST':
+        form = BillForm(request.POST, instance=bill)
+        if form.is_valid():
+            bill = form.save(commit=False)
+            bill.amount_in_words = num2words(bill.total_amount, to='cardinal').title() + ' Only'
+            bill.save()
+            messages.success(request, 'Bill updated successfully!')
+            return redirect('bill_list')
+    else:
+        form = BillForm(instance=bill)
+
+    return render(request, 'bill/edit_bill.html', {'form': form, 'bill': bill})
         
         
                 

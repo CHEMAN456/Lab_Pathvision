@@ -5,7 +5,7 @@ class BillForm(forms.ModelForm):
     
     class Meta:
         model = Bill 
-        fields = ['date','patient_name','age','doctor_name','test_details']
+        fields = ['date','prefix','patient_name','age','gender','doctor_choice','doctor_name','test_details']
 
         widgets = {
             'date':forms.TextInput(attrs={'placeholder':'DD-MM-YY'}),
