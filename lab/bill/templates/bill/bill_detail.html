@@ -14,11 +14,17 @@
 
         #invoiceBox{
             position: absolute;
-            left:0;
-            top:0;
-            width:100%;
-            height:auto;
-            border:none;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Centers the invoice perfectly on the page */
+            width: 500px; /* Or your preferred width */
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: white;
+            overflow: visible;
+            font-size: 14px; /* Base font size */
+            border: 2px solid black;
+            box-sizing: border-box;
         }
         
         .btn, a.btn,.mt-4{
@@ -85,7 +91,7 @@
                     Date: {{ bill.date }}<br>
                     Patient's Name: {{ bill.prefix }}{{ bill.patient_name }}<br>
                     Age: {{ bill.age }}/{{ bill.gender }}<br>
-                    Dr.Ref : {{ bill.doctor_name }}
+                    Dr.Ref : Dr.{{ bill.doctor_name }}
                 </td>
             </tr>
         </table>

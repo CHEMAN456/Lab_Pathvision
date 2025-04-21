@@ -4,18 +4,18 @@ import json
 # Create your models here.
 
 DOCTOR_CHOICES = [
-    ('Dr.Geeta Dalal', 'Dr.Geeta Dalal'),
-    ('Dr.Kirti Patil', 'Dr.Kirti Patil'),
-    ('Dr.S.Sahasrabuddhe', 'Dr.S.Sahasrabuddhe'),
-    ('Dr.Hariprasad Shetty', 'Dr.Hariprasad Shetty'),
-    ('Dr.Nitin Lodha', 'Dr.Nitin Lodha'),
-    ('Dr.Alka Jain', 'Dr.Alka Jain'),
+    ('Geeta Dalal', 'Geeta Dalal'),
+    ('Kirti Patil', 'Kirti Patil'),
+    ('S.Sahasrabuddhe', 'S.Sahasrabuddhe'),
+    ('Hariprasad Shetty', 'Hariprasad Shetty'),
+    ('Nitin Lodha', 'Nitin Lodha'),
+    ('Alka Jain', 'Alka Jain'),
     ('Other', 'Other'),  # Triggers manual entry
 ]
 PREFIX_CHOICES = [
     ('Mr.', 'Mr.'),
     ('Mrs.', 'Mrs.'),
-    ('Mst.', 'Mst.'),
+    ('Mst.', 'Mst.'),  
     ('Miss.', 'Miss.'),
     ('Ms.', 'Ms.'),
 ]
