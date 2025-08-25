@@ -67,6 +67,28 @@
     .tight-line p {
         margin-bottom: 0px; /* or 2px for even tighter spacing */
     }
+    .diagonal-slash-cell {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+    
+    .diagonal-slash-cell::after {
+        content: "";
+        position: absolute;
+        top: 15px;
+        left: 0;
+        width: 150%;
+        height: 2px;
+        background-color: black;
+        transform: rotate(-50deg);
+        transform-origin:  left;
+    }
+    
+    
+    
+    
+    
     
 
     .bold { font-weight: bold; }
@@ -97,24 +119,57 @@
         </table>
 
         <!-- Test Details Table -->
-        <table >
-            <tr>
-                <th>Sr.No.</th>
-                <th>Test Description</th>
-                <th>Amount</th>
-            </tr>
-            {% for test_name, result in test_items %}
-            <tr>
-                <td style = "padding-top:2px; padding-bottom:2px;">{{ forloop.counter }}</td>
-                <td class="bold" style ="padding-top:2px;padding-bottom:2px;">{{ test_name }}</td>
-                <td class="right" style ="padding-top:2px;padding-bottom:2px;">{{ result }}</td>
-            </tr>
-            {% endfor %}
-            <tr>
-                <td colspan="2" class="right bold">Total</td>
-                <td class="bold right">{{ bill.total_amount }}/-</td>
-            </tr>
-        </table>
+        <div class="slash-table-wrapper">
+            <table>
+                <tr>
+                    <th>Sr.No.</th>
+                    <th>Test Description</th>
+                    <th class="amount-header">Amount</th>
+                </tr>
+        
+                {% if test_items|length == 1 and test_items.0.0 == '/' and test_items.0.1 == '/' %}
+
+                    {% for i in range_10 %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>&nbsp;</td>
+                        <td class="amount-cell">
+                            {% if forloop.first %}
+                                <div class="diagonal-container">
+                                    <div class="diagonal-line"></div>
+                                </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    {% for test_name, result in test_items %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td class="bold">{{ test_name }}</td>
+                        <td class="right">
+                            {% if forloop.last and result == '/' %}
+                                <div class="diagonal-slash-cell"></div>
+                            {% else %}
+                                <div>{{ result }}</div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                
+                
+                {% endif %}
+        
+                <tr>
+                    <td colspan="2" class="right bold">Total</td>
+                    <td class="bold right">{{ bill.total_amount }}/-</td>
+                </tr>
+            </table>
+        </div>
+                
+        
+
+        
 
         <!-- Footer Section Inside Bill -->
         <div class="tight-line">

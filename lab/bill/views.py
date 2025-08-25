@@ -25,23 +25,44 @@ def create_bill(request):
             if doctor_choice != 'Other':
                 bill.doctor_name = doctor_choice
 
-            # Auto-calculate total_amount
-            bill.total_amount = sum(
-                float(line.split(':')[1].strip())
-                for line in bill.test_details.splitlines()
-                if ':' in line
-            )
+            # Calculate total or handle slashes
+            total = 0
+            test_lines = bill.test_details.splitlines()
+            test_items = []
 
-            # Convert to words
-            bill.amount_in_words = num2words(bill.total_amount, to='cardinal').title() + ' Only'
+            for line in test_lines:
+                if ':' in line:
+                    name, amount = map(str.strip, line.split(':', 1))
+                    if amount:
+                        try:
+                            total += float(amount)
+                        except ValueError:
+                            pass  # Skip invalid amounts
+                        test_items.append((name, amount))
+                    else:
+                        test_items.append((name, '/'))
+                else:
+                    test_items.append((line.strip(), '/'))
 
+            # Handle manual total if all items are '/'
+            if total == 0:
+                try:
+                    total = float(request.POST.get('manual_total', 0))
+                except ValueError:
+                    total = 0  # fallback to zero if invalid
+
+            bill.total_amount = total
+            bill.amount_in_words = num2words(total, to='cardinal').title() + ' Only'
             bill.save()
+
             messages.success(request, f'Bill created successfully for {bill.patient_name}')
             return redirect('bill_detail', bill_id=bill.id)
     else:
         form = BillForm()
 
     return render(request, 'bill/create_bill.html', {'form': form})
+
+
 
     
 @login_required
@@ -52,25 +73,24 @@ def bill_list(request):
 
 @login_required
 def bill_detail(request, bill_id):
-    bill = get_object_or_404(Bill, id=bill_id, user=request.user)
+    bill = get_object_or_404(Bill, pk=bill_id, user=request.user)
 
-    # Split test_details into a list of tuples (test_name, result)
-    test_lines = bill.test_details.splitlines()
     test_items = []
-
-    for line in test_lines:
-        parts = line.split(':')
-        if len(parts) == 2:
-            test_items.append((parts[0].strip(), parts[1].strip()))
+    for line in bill.test_details.splitlines():
+        if ':' in line:
+            name, amount = map(str.strip, line.split(':', 1))
+            test_items.append((name, amount if amount else '/'))
         else:
-            test_items.append((line.strip(), ''))  # fallback if format is off
-
+            test_items.append((line.strip(), '/'))
+    range_10 = range(10)
     context = {
+
         'bill': bill,
         'test_items': test_items,
+        'range_10': range(10),  # Used for slash rendering if all results are '/'
     }
-
     return render(request, 'bill/bill_detail.html', context)
+
 
 
 
